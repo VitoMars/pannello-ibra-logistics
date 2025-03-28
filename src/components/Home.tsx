@@ -6,6 +6,7 @@ import Inventario from '../components/Inventario';
 import Storico from '../components/Storico';
 import { InventoryItem, Warehouse } from "../types/types";
 import { Dropdown } from "primereact/dropdown";
+import { Dialog } from 'primereact/dialog';
 
 const Home = () => {
   const warehouses: Warehouse[] = [
@@ -17,6 +18,8 @@ const Home = () => {
   const [inventory, setInventory] = useState<InventoryItem[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<number>(0);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isErrorDialogVisible, setIsErrorDialogVisible] = useState(false);
 
   // Funzione per caricare i dati dell'inventario
   const fetchInventory = async () => {
@@ -43,6 +46,8 @@ const Home = () => {
       setInventory(updatedInventory);
     } catch (error) {
       console.error("Errore nel caricamento:", error);
+      setErrorMessage("Si è verificato un errore durante il caricamento del magazzino.");
+      setIsErrorDialogVisible(true);
     } finally {
       setIsLoading(false);
     }
@@ -85,6 +90,15 @@ const Home = () => {
             </TabPanel>
           ))}
         </TabView>
+
+        <Dialog
+          header="Errore"
+          visible={isErrorDialogVisible}
+          onHide={() => setIsErrorDialogVisible(false)}
+          footer={<Button label="Chiudi" onClick={() => setIsErrorDialogVisible(false)} />}
+        >
+          <p>{errorMessage}</p>
+        </Dialog>
       </div>
     </div>
   );
