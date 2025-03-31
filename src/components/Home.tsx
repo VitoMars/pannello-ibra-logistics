@@ -59,9 +59,12 @@ const Home = () => {
   ];
 
   return (
-    <div className="flex justify-center items-center w-full h-screen p-4">
-      <div>
-        <h1 className="mb-12">Pannello Supervisore Magazzino Ibra Logistics</h1>
+    <div className="flex justify-center h-screen">
+      <div className="w-3xl">
+        <div className="my-12">
+          <h1 className="text-4xl font-bold">Piattaforma Ibra Consulting</h1>
+          <h3 className="text-xl">Pannello Supervisore</h3>
+        </div>
 
         {/* Selezione magazzino + Pulsante ricerca */}
         <div className="flex justify-center gap-3 mt-5">

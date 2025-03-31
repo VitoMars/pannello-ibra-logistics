@@ -48,8 +48,8 @@ const Storico = ({ inventory, isLoading }: StoricoProps) => {
         emptyMessage="Nessun dato disponibile"
       >
         <Column field="codice" header="Codice" sortable />
-        <Column field="descrizionebreve" header="Descrizione" sortable />
-        <Column field="unitaDiMisura" header="Unità di misura" sortable />
+        <Column field="descrizionebreve" header="Articolo" sortable />
+        <Column field="unitaDiMisura" header="U.d.M." sortable style={{ textAlign: "center" }} />
         <Column field="dataultimomovimento" header="Movimento" sortable body={(rowData: InventoryItem) => formatDate(rowData.dataultimomovimento)} />
       </DataTable>
     </div>

@@ -52,9 +52,9 @@ const Inventario = ({ inventory, isLoading }: InventarioProps) => {
         emptyMessage="Nessun dato disponibile"
       >
         <Column field="codice" header="Codice" sortable />
-        <Column field="descrizionebreve" header="Descrizione" sortable />
-        <Column field="unitaDiMisura" header="Unità di misura" sortable />
-        <Column field="qtagiacenzaattuale" header="Quantità in giacenza" sortable />
+        <Column field="descrizionebreve" header="Articolo" sortable />
+        <Column field="unitaDiMisura" header="U.d.M." sortable style={{ textAlign: "center" }} />
+        <Column field="qtagiacenzaattuale" header="Qtà in giacenza" sortable style={{ textAlign: "right" }} />
       </DataTable>
     </div>
   );
