@@ -4,9 +4,10 @@ import { Button } from 'primereact/button';
 import { TabView, TabPanel } from 'primereact/tabview';
 import Inventario from '../components/Inventario';
 import Storico from '../components/Storico';
-import { InventoryItem, Warehouse } from "../types/types";
+import { CausalMovements, InventoryItem, Warehouse } from "../types/types";
 import { Dropdown } from "primereact/dropdown";
 import { Dialog } from 'primereact/dialog';
+import { useWarehouseStore } from "../store/useStore";
 
 const Home = () => {
   const warehouses: Warehouse[] = [
@@ -14,12 +15,15 @@ const Home = () => {
     { name: "Paredes", uid: "ecbfd911-5564-4298-9e92-637f76a3f6e6" }
   ];
 
-  const [selectedWarehouseId, setSelectedWarehouseId] = useState<string | null>(null);
+  const selectedWarehouseId = useWarehouseStore((state) => state.selectedWarehouseId);
+  const setSelectedWarehouseId = useWarehouseStore((state) => state.setSelectedWarehouseId);
+
   const [inventory, setInventory] = useState<InventoryItem[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<number>(0);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isErrorDialogVisible, setIsErrorDialogVisible] = useState(false);
+  const [causalMovements, setCausalMovements] = useState<CausalMovements[]>([]);
 
   // Funzione per caricare i dati dell'inventario
   const fetchInventory = async () => {
@@ -44,6 +48,11 @@ const Home = () => {
       }));
 
       setInventory(updatedInventory);
+
+      const casualiResponse = await axios.get(`https://www.ibralogistics.it/api/ioFatturo_TipoCausaleMovimento/list/uidAzienda/${selectedWarehouseId}`);
+      const casualiMovimento = JSON.parse(casualiResponse.data.obj);
+
+      setCausalMovements(casualiMovimento);
     } catch (error) {
       console.error("Errore nel caricamento:", error);
       setErrorMessage("Si è verificato un errore durante il caricamento del magazzino.");
@@ -55,13 +64,13 @@ const Home = () => {
 
   const tabs = [
     { title: 'Inventario', icon: "pi pi-box mr-2", content: <Inventario inventory={inventory} isLoading={isLoading} /> },
-    { title: 'Storico Movimenti', icon: "pi pi-history mr-2", content: <Storico inventory={inventory} isLoading={isLoading} /> }
+    { title: 'Storico Movimenti', icon: "pi pi-history mr-2", content: <Storico isLoadingTable={isLoading} UidAzienda={selectedWarehouseId!} causalMovements={causalMovements} /> }
   ];
 
   return (
     <div className="flex justify-center h-screen">
-      <div className="w-3xl">
-        <div className="my-12">
+      <div className="w-5xl">
+        <div className="my-12 text-center">
           <h1 className="text-4xl font-bold">Piattaforma Ibra Consulting</h1>
           <h3 className="text-xl">Pannello Supervisore</h3>
         </div>
@@ -75,7 +84,7 @@ const Home = () => {
             optionValue="uid"
             onChange={(e) => setSelectedWarehouseId(e.value)}
             placeholder="Seleziona un magazzino"
-            className="w-2xs text-start"
+            className="w-2xs"
           />
           <Button
             label="Cerca"

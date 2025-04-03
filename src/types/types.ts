@@ -24,3 +24,24 @@ export interface InventoryItem {
   qtainordineafornitori: number;
   dataultimomovimento: string;
 }
+
+export interface CausalMovements {
+  Descrizione: string;
+  IDCausaleMovimento: number;
+  Ordinamento: number;
+  Segno: number;
+}
+
+export interface MovementHistory {
+  codicearticolo: string;
+  datamovimento: string;
+  descrizionearticolo: string;
+  descrizionereadonly: string;
+  idtipocausalemovimento: number;
+  note: string;
+  quantita: number;
+  uid: string;
+  uidarticolo: string;
+  uidtipodeposito: string;
+  uidtipounitadimisura: string;
+}
