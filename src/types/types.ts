@@ -25,6 +25,15 @@ export interface InventoryItem {
   dataultimomovimento: string;
 }
 
+export interface Units {
+  descrizione: string;
+  descrizionereadonly: string;
+  id: number;
+  isannullato: boolean;
+  isdefault: boolean;
+  uid: string;
+}
+
 export interface CausalMovements {
   Descrizione: string;
   IDCausaleMovimento: number;

@@ -69,7 +69,7 @@ const Home = () => {
 
   return (
     <div className="flex justify-center h-screen">
-      <div className="w-5xl">
+      <div className="w-6xl">
         <div className="my-12 text-center">
           <h1 className="text-4xl font-bold">Piattaforma Ibra Consulting</h1>
           <h3 className="text-xl">Pannello Supervisore</h3>

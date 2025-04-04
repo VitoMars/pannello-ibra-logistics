@@ -1,5 +1,5 @@
 import { DataTable } from "primereact/datatable";
-import { CausalMovements, MovementHistory } from "../types/types";
+import { CausalMovements, MovementHistory, Units } from "../types/types";
 import { Column } from "primereact/column";
 import dayjs from "dayjs";
 import { useState } from "react";
@@ -10,6 +10,7 @@ import axios from "axios";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { useWarehouseStore } from "../store/useStore";
+import { formatDate } from "../utils/formatDate";
 
 interface StoricoProps {
   isLoadingTable: boolean;
@@ -56,16 +57,25 @@ const Storico = ({ isLoadingTable, UidAzienda, causalMovements }: StoricoProps) 
       const response = await axios.get<MovementHistory[]>(url);
 
       const unitResponse = await axios.get(`https://www.ibralogistics.it/api/ioFatturo_TipoUnitaDiMisura/list/uidAzienda/${selectedWarehouseId}`);
-      const units = JSON.parse(unitResponse.data.obj);
+      const units: Units[] = JSON.parse(unitResponse.data.obj);
+
+      const causualiResponse = await axios.get(`https://www.ibralogistics.it/api/ioFatturo_TipoCausaleMovimento/list/uidAzienda/${selectedWarehouseId}`);
+      const causualiMovimento: CausalMovements[] = JSON.parse(causualiResponse.data.obj);
 
       const unitMap: Record<string, string> = {};
       units.forEach((unit: { uid: string; descrizione: string }) => {
         unitMap[unit.uid] = unit.descrizione;
       });
 
+      const causaliMap: Record<string, string> = {};
+      causualiMovimento.forEach((causale: { IDCausaleMovimento: number; Descrizione: string }) => {
+        causaliMap[causale.IDCausaleMovimento] = causale.Descrizione;
+      });
+
       const updatedMovements = response.data.map(item => ({
         ...item,
         descrizionearticolo: item.descrizionearticolo.trim(),
+        descrizionecausale: causaliMap[item.idtipocausalemovimento] || "Non disponibile",
         unitaDiMisura: unitMap[item.uidtipounitadimisura] || "Non disponibile"
       }));
 
@@ -133,8 +143,8 @@ const Storico = ({ isLoadingTable, UidAzienda, causalMovements }: StoricoProps) 
         <Column field="descrizionearticolo" header="Articolo" sortable />
         <Column field="unitaDiMisura" header="U.d.M." sortable style={{ textAlign: "center" }} />
         <Column field="quantita" header="Q.ta movimentata" sortable />
-        {/* <Column field="dataultimomovimento" header="Movimento" sortable body={rowData => formatDate(rowData.dataultimomovimento)} /> */}
-        {/* <Column field="causale" header="Causale" sortable /> */}
+        <Column field="datamovimento" header="Movimento" sortable body={rowData => formatDate(rowData.datamovimento)} />
+        <Column field="descrizionecausale" header="Causale" sortable />
         <Column field="note" header="Note" sortable />
       </DataTable>
 
