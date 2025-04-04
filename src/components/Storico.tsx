@@ -142,8 +142,8 @@ const Storico = ({ isLoadingTable, UidAzienda, causalMovements }: StoricoProps) 
         <Column field="codicearticolo" header="Codice" sortable />
         <Column field="descrizionearticolo" header="Articolo" sortable />
         <Column field="unitaDiMisura" header="U.d.M." sortable style={{ textAlign: "center" }} />
-        <Column field="quantita" header="Q.ta movimentata" sortable />
-        <Column field="datamovimento" header="Movimento" sortable body={rowData => formatDate(rowData.datamovimento)} />
+        <Column field="quantita" header="Q.ta movimentata" sortable style={{ textAlign: "right" }} />
+        <Column field="datamovimento" header="Movimento" sortable body={rowData => formatDate(rowData.datamovimento)} style={{ textAlign: "right" }} />
         <Column field="descrizionecausale" header="Causale" sortable />
         <Column field="note" header="Note" sortable />
       </DataTable>
